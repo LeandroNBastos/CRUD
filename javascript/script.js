@@ -1,9 +1,21 @@
-// script.js
+
 document.addEventListener("DOMContentLoaded", () => {
     const userForm = document.getElementById("user-form");
     const userTable = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+    const deleteModal = document.getElementById("delete-modal");
+    const closeButton = document.querySelector(".close-button");
+    const confirmDeleteButton = document.getElementById("confirm-delete");
+    const cancelDeleteButton = document.getElementById("cancel-delete");
+
+    const editModal = document.getElementById("edit-modal");
+    const editCloseButton = document.querySelector(".edit-close-button");
+    const editForm = document.getElementById("edit-form");
+    const editName = document.getElementById("edit-name");
+    const editEmail = document.getElementById("edit-email");
+
     let users = [];
     let editIndex = null;
+    let userIdToDelete = null;
 
     userForm.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -27,20 +39,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     userTable.addEventListener("click", (event) => {
         if (event.target.classList.contains("edit")) {
-            // Edit
+            // Open Edit Modal
             const index = event.target.dataset.index;
             const user = users[index];
-            document.getElementById("name").value = user.name;
-            document.getElementById("email").value = user.email;
+            editName.value = user.name;
+            editEmail.value = user.email;
             editIndex = index;
+            editModal.style.display = "block";
         } else if (event.target.classList.contains("delete")) {
-            // Delete
-            const index = event.target.dataset.index;
-            users.splice(index, 1);
-            renderTable();
+            // Open Delete Modal
+            userIdToDelete = event.target.dataset.index;
+            deleteModal.style.display = "block";
         }
     });
 
+    // Function to render table
     function renderTable() {
         userTable.innerHTML = "";
         users.forEach((user, index) => {
@@ -56,4 +69,43 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         });
     }
+
+    // Function to close delete modal
+    function closeModal() {
+        deleteModal.style.display = "none";
+        userIdToDelete = null;
+    }
+
+    // Function to close edit modal
+    function closeEditModal() {
+        editModal.style.display = "none";
+        editForm.reset();
+        editIndex = null;
+    }
+
+    // Event listeners for modal buttons
+    closeButton.addEventListener("click", closeModal);
+    cancelDeleteButton.addEventListener("click", closeModal);
+    confirmDeleteButton.addEventListener("click", () => {
+        if (userIdToDelete !== null) {
+            users.splice(userIdToDelete, 1);
+            renderTable();
+            closeModal();
+        }
+    });
+
+    editCloseButton.addEventListener("click", closeEditModal);
+
+    editForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (editIndex !== null) {
+            users[editIndex].name = editName.value;
+            users[editIndex].email = editEmail.value;
+            renderTable();
+            closeEditModal();
+        }
+    });
+
+    // Initial render
+    renderTable();
 });

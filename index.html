@@ -29,6 +29,29 @@
             <tbody></tbody>
         </table>
     </div>
+    <!-- Modal de Edição -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button edit-close-button">&times;</span>
+            <h2>Editar Usuário</h2>
+            <form id="edit-form">
+                <label for="edit-name">Nome:</label>
+                <input type="text" id="edit-name" required>
+                <label for="edit-email">Email:</label>
+                <input type="email" id="edit-email" required>
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
+    </div>
+    <!-- Modal de Confirmação -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p>Você tem certeza que deseja excluir este usuário?</p>
+            <button id="confirm-delete">Confirmar</button>
+            <button id="cancel-delete">Cancelar</button>
+        </div>
+    </div>
     <script src="javascript/script.js"></script>
 </body>
 </html>
